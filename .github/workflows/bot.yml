@@ -62,7 +62,7 @@ jobs:
           fi
           echo "Changed files:"
           printf '%s\n' "$FILES"
-          RELEVANT=false
+          RELEVANT=true
           while IFS= read -r f; do
             [ -z "$f" ] && continue
             case "$f" in
@@ -1568,7 +1568,7 @@ jobs:
           SPARK_ARCHIVE_BASENAME=$(basename $SPARK_ARCHIVE)
           echo "SPARK_HOME=$GITHUB_WORKSPACE/${SPARK_ARCHIVE_BASENAME%.*}" >> $GITHUB_ENV
       - name: Save Spark archive
-        if: needs.changes.outputs.relevant == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master' && steps.spark-archive.outputs.cache-hit != 'true'
+        if: needs.changes.outputs.relevant == 'true' && steps.spark-archive.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
           path: ~/spark-archives/${{ matrix.sparkArchive }}
